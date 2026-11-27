@@ -1,9 +1,11 @@
 import { pool } from "../../db/index.js";
 import type { IUser, IUserUpdate } from "./user.interface.js";
+import bcrypt from "bcryptjs";
 
 const createUserIntoDB = async (payload: IUser) => {
   // console.log(req.body)
   const { name, email, password, age } = payload;
+  
   const result = await pool.query(
     `
     INSERT INTO users(name, email, password, age ) VALUES

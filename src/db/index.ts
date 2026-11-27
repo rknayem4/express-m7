@@ -1,9 +1,8 @@
 import { Pool } from "pg";
 import config from "../config/index.js";
 
-
 export const pool = new Pool({
-  connectionString: process.env.BACKEND_URL
+  connectionString: process.env.BACKEND_URL,
 });
 // console.log(pool)
 
@@ -23,6 +22,22 @@ export const initDB = async () => {
       
       );
       `);
+
+    await pool.query(`
+        CREATE TABLE IF NOT EXISTS profile(
+        id SERIAL PRIMARY KEY, 
+        user_id INT UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+
+        bio TEXT,
+        address TEXT,
+        phone VARCHAR(15),
+        gender VARCHAR(15),
+
+        created_at TIMESTAMP DEFAULT NOW(),
+      updated_at TIMESTAMP DEFAULT NOW()
+        
+        );
+        `);
     console.log("Database is Connected");
   } catch (error) {
     console.log(error);
